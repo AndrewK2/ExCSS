@@ -184,5 +184,9 @@ namespace ExCSS
         {
             return prefix.Is(Keywords.Asterisk) ? match : string.Concat(prefix, PseudoClassNames.Separator, match);
         }
+
+        public override string ToString() {
+            return Text;
+        }
     }
 }

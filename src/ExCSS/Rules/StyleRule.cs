@@ -30,5 +30,9 @@ namespace ExCSS
         }
 
         public StyleDeclaration Style => Children.OfType<StyleDeclaration>().FirstOrDefault();
+
+        public override string ToString() {
+            return string.Concat(SelectorText, "{...}");
+        }
     }
 }
