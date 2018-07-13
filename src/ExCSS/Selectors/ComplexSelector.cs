@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace ExCSS
 {
-    internal sealed class ComplexSelector : StylesheetNode, ISelector
+    internal sealed class ComplexSelector : StylesheetNode, ISelector, IEnumerable<ISelector>
     {
         private readonly List<CombinatorSelector> _selectors;
 
@@ -83,6 +85,14 @@ namespace ExCSS
                     Delimiter = combinator.Delimiter
                 });
             }
+        }
+
+        public IEnumerator<ISelector> GetEnumerator() {
+            return _selectors.Select(c => c.Selector).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() {
+            return GetEnumerator();
         }
     }
 }
