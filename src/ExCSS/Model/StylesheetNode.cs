@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -71,7 +72,10 @@ namespace ExCSS
         public void RemoveChild(IStylesheetNode child)
         {
             Teardown(child);
-            _children.Remove(child);
+            var isRemoved = _children.Remove(child);
+            if(!isRemoved) {
+                throw new InvalidOperationException($"Child node \"{child}\" was not removed from the stylesheet node \"{this}\"");
+            }
         }
 
         public void Clear()
