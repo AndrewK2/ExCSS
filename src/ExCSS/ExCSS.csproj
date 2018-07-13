@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.1;net462</TargetFramework>
+    <TargetFrameworks>netstandard1.1</TargetFrameworks>
     <AssemblyName>ExCSS</AssemblyName>
     <PackageId>ExCSS</PackageId>
     <Title>ExCSS .NET Stylesheet Parser</Title>
@@ -13,7 +13,7 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
-
+ 
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
