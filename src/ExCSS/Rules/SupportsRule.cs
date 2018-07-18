@@ -44,7 +44,10 @@ namespace ExCSS
                     return;
                 }
 
-                RemoveChild(Condition);
+                if(Children.OfType<IConditionFunction>().Any()) {
+                    RemoveChild(Condition);
+                }
+
                 AppendChild(value);
             }
         }
