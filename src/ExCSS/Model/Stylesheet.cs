@@ -15,7 +15,8 @@ namespace ExCSS
         }
 
         internal RuleList Rules { get; }
-
+        internal IEnumerable<IStyleFormattable> FormattableItems => Children;
+        
         public IEnumerable<IRule> CharacterSetRules => Rules.Where(r => r is CharsetRule);
         public IEnumerable<IRule> FontfaceSetRules => Rules.Where(r => r is FontFaceRule);
         public IEnumerable<IRule> MediaRules => Rules.Where(r => r is MediaRule);
@@ -44,9 +45,8 @@ namespace ExCSS
             return index;
         }
 
-        public override void ToCss(TextWriter writer, IStyleFormatter formatter)
-        {
-            writer.Write(formatter.Sheet(Rules));
+        public override void ToCss(TextWriter writer, IStyleFormatter formatter) {
+            writer.Write(formatter.Sheet(FormattableItems));
         }
     }
 }

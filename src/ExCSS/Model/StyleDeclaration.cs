@@ -42,71 +42,98 @@ namespace ExCSS
 
         public override void ToCss(TextWriter writer, IStyleFormatter formatter)
         {
-            var list = new List<string>();
+            var declarationsToWrite = new List<string>();
             var serialized = new List<string>();
-            foreach (var declaration in Declarations)
+            
+            var preserveComments = PreserveComments;
+            var propertyDeclarations = Declarations.ToList();
+            var propertyFactory = PropertyFactory.Instance;
+            var isStrictMode = IsStrictMode;
+
+            foreach (var child in Children)
             {
-                var property = declaration.Name;
-                if (IsStrictMode)
-                {
-                    if (serialized.Contains(property))
-                    {
-                        continue;
-                    }
-
-                    var shorthands = PropertyFactory.Instance.GetShorthands(property).ToList();
-                    if (shorthands.Any())
-                    {
-                        var longhands = Declarations.Where(m => !serialized.Contains(m.Name)).ToList();
-                        foreach (var shorthand in shorthands.OrderByDescending(m =>
-                            PropertyFactory.Instance.GetLonghands(m).Length))
+                switch(child) {
+                    case Comment comment:
+                        if(preserveComments) 
                         {
-                            var rule = PropertyFactory.Instance.CreateShorthand(shorthand);
-                            var properties = PropertyFactory.Instance.GetLonghands(shorthand);
-                            var currentLonghands = longhands.Where(m => properties.Contains(m.Name)).ToArray();
-
-                            if (currentLonghands.Length == 0)
+                            if(declarationsToWrite.Any()) 
                             {
-                                continue;
+                                //flush declarations before writing comment
+                                writer.Write(formatter.Declarations(declarationsToWrite));
+                                declarationsToWrite.Clear();
                             }
-
-                            var important = currentLonghands.Count(m => m.IsImportant);
-
-                            if (important > 0 && important != currentLonghands.Length)
-                            {
-                                continue;
-                            }
-
-                            if (properties.Length != currentLonghands.Length)
-                            {
-                                continue;
-                            }
-
-                            var value = rule.Stringify(currentLonghands);
-
-                            if (string.IsNullOrEmpty(value))
-                            {
-                                continue;
-                            }
-
-                            list.Add(CompressedStyleFormatter.Instance.Declaration(shorthand, value, important != 0));
-
-                            foreach (var longhand in currentLonghands)
-                            {
-                                serialized.Add(longhand.Name);
-                                longhands.Remove(longhand);
-                            }
+                            writer.Write(formatter.Comment(comment.Data));                            
+                            continue;
                         }
-                    }
-                    if (serialized.Contains(property))
-                    {
-                        continue;
-                    }
-                    serialized.Add(property);
+                        break;
+                    case Property declaration:
+                        var property = declaration.Name;
+                        if (isStrictMode)
+                        {
+                            if (serialized.Contains(property))
+                            {
+                                continue;
+                            }
+
+                            var shorthands = propertyFactory
+                                             .GetShorthands(property)
+                                             .OrderByDescending(m => propertyFactory.GetLonghands(m).Length)
+                                             .ToList();
+
+                            if (shorthands.Any())
+                            {
+                                var longhands = propertyDeclarations.Where(m => !serialized.Contains(m.Name)).ToList();
+                                foreach (var shorthand in shorthands)
+                                {
+                                    var rule = propertyFactory.CreateShorthand(shorthand);
+                                    var properties = propertyFactory.GetLonghands(shorthand);
+                                    var currentLonghands = longhands.Where(m => properties.Contains(m.Name)).ToArray();
+
+                                    if (currentLonghands.Length == 0)
+                                    {
+                                        continue;
+                                    }
+
+                                    var important = currentLonghands.Count(m => m.IsImportant);
+
+                                    if (important > 0 && important != currentLonghands.Length)
+                                    {
+                                        continue;
+                                    }
+
+                                    if (properties.Length != currentLonghands.Length)
+                                    {
+                                        continue;
+                                    }
+
+                                    var value = rule.Stringify(currentLonghands);
+
+                                    if (string.IsNullOrEmpty(value))
+                                    {
+                                        continue;
+                                    }
+
+                                    declarationsToWrite.Add(CompressedStyleFormatter.Instance.Declaration(shorthand, value, important != 0));
+
+                                    foreach (var longhand in currentLonghands)
+                                    {
+                                        serialized.Add(longhand.Name);
+                                        longhands.Remove(longhand);
+                                    }
+                                }
+                            }
+                            if (serialized.Contains(property))
+                            {
+                                continue;
+                            }
+                            serialized.Add(property);
+                        }
+                    break;
                 }
-                list.Add(declaration.ToCss(formatter));
+                
+                declarationsToWrite.Add(child.ToCss(formatter));
             }
-            writer.Write(formatter.Declarations(list));
+            writer.Write(formatter.Declarations(declarationsToWrite));
         }
 
         public string RemoveProperty(string propertyName)
@@ -269,7 +296,7 @@ namespace ExCSS
             return Declarations.FirstOrDefault(m => m.Name.Isi(name));
         }
 
-        internal void SetProperty(Property property)
+        internal void SetProperty(IProperty property)
         {
             var shorthand = property as ShorthandProperty;
             if (shorthand != null)
@@ -326,7 +353,7 @@ namespace ExCSS
             }
         }
 
-        void SetLonghand(Property property)
+        void SetLonghand(IProperty property)
         {
             foreach (var declaration in Declarations)
             {
@@ -368,6 +395,7 @@ namespace ExCSS
         public string this[string name] => GetPropertyValue(name);
         public int Length => Declarations.Count();
         public bool IsStrictMode =>/* IsReadOnly ||*/ _parser.Options.IncludeUnknownDeclarations == false;
+        public bool PreserveComments => _parser.Options.PreserveComments;
         //public bool IsReadOnly => _parser == null;
         public IEnumerable<Property> Declarations => Children.OfType<Property>();
 

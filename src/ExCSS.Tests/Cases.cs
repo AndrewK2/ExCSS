@@ -8,9 +8,9 @@ namespace ExCSS.Tests
 	//[TestFixture]
 	public class CssCasesTests : CssConstructionFunctions
 	{
-        static Stylesheet ParseSheet(string text)
+        static Stylesheet ParseSheet(string text, bool preserveComments = false)
         {
-            return ParseStyleSheet(text, true, true, true, true, true);
+            return ParseStyleSheet(text, true, true, true, true, true, preserveComments);
         }
 
 		[Fact]//[Test]
@@ -195,7 +195,7 @@ head, /* footer, */body/*, nav */ { /* 2 */
 			Assert.Equal(1, sheet.Rules.Length);
 
             Assert.Equal(@"head,body", ((StyleRule)sheet.Rules[0]).SelectorText);
-            Assert.Equal(@"""bar""", ((StyleRule)sheet.Rules[0]).Style["foo"]);
+            Assert.Equal(@"""bar""", ((StyleRule)sheet.Rules[0]).Style["foo"]);            
 		}
 
 		[Fact]//[Test]
@@ -1040,6 +1040,24 @@ lack; }");
 
             Assert.IsType<Comment>(comment);
             Assert.Equal(" Comment at the start ", ((Comment)comment).Data);
+        }
+
+        [Fact]
+        public void StyleSheetPreserveBlockCommentsInDeclarationValue() {
+            const string source = @".test {foo: /* 9 */;}";
+            const string expected = ".test {\n\tfoo: /* 9 */;\n}";
+
+            var sheet = ParseSheet(source, true);
+            Assert.Equal(expected, sheet.ToCss(new ReadableStyleFormatter()));
+        }
+
+        [Fact]
+        public void StyleSheetPreserveBlockCommentsAtDeclarationLevel() {
+            const string source = ".test{/* color is red */ color: red;/* font is bold*/font-weight:bold;}";
+            const string expected = ".test {\n\t/* color is red */color: red;/* font is bold*/font-weight: bold;\n}";
+
+            var sheet = ParseSheet(source, true);
+            Assert.Equal(expected, sheet.ToCss(new ReadableStyleFormatter()));
         }
     }
 }

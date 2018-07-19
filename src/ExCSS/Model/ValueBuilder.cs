@@ -4,10 +4,10 @@ namespace ExCSS
 {
     internal sealed class ValueBuilder
     {
-        public ValueBuilder()
+        public ValueBuilder(bool preserveComments)
         {
             _values = new List<Token>();
-            Reset();
+            Reset(preserveComments);
         }
        
         private readonly List<Token> _values;
@@ -19,6 +19,7 @@ namespace ExCSS
 
         public bool IsValid => _valid && IsReady;
         public bool IsImportant { get; private set; }
+        private bool PreserveComments { get; set; }
         
         public TokenValue GetResult()
         {
@@ -58,6 +59,9 @@ namespace ExCSS
                     Add(token);
                     break;
                 case TokenType.Comment:
+                    if(PreserveComments) {
+                        Add(token);
+                    }
                     break;
                 default: 
                     _valid = false;
@@ -65,12 +69,13 @@ namespace ExCSS
                     break;
             }
         }
-        public ValueBuilder Reset()
+        public ValueBuilder Reset(bool preserveComments)
         {
             _open = 0;
             _valid = true;
             _buffer = null;
             IsImportant = false;
+            PreserveComments = preserveComments;
             _values.Clear();
             return this;
         }

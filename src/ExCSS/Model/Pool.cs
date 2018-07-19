@@ -29,13 +29,13 @@ namespace ExCSS
             }
         }
 
-        public static ValueBuilder NewValueBuilder()
+        public static ValueBuilder NewValueBuilder(bool preserveComments)
         {
             lock (Lock)
             {
                 return Value.Count == 0 
-                    ? new ValueBuilder()
-                    : Value.Pop().Reset();
+                    ? new ValueBuilder(preserveComments)
+                    : Value.Pop().Reset(preserveComments);
             }
         }
 

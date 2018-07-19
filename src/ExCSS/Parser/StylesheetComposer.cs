@@ -1074,7 +1074,7 @@ namespace ExCSS
 
         private TokenValue CreateValue(TokenType closing, ref Token token, out bool important)
         {
-            var value = Pool.NewValueBuilder();
+            var value = Pool.NewValueBuilder(_parser.Options.PreserveComments);
             _lexer.IsInValue = true;
             token = NextToken();
             var start = token.Position;
@@ -1135,7 +1135,7 @@ namespace ExCSS
 
                 if (token.Type == TokenType.Colon)
                 {
-                    var value = Pool.NewValueBuilder();
+                    var value = Pool.NewValueBuilder(_parser.Options.PreserveComments);
                     token = NextToken();
 
                     while (token.IsNot(TokenType.RoundBracketClose, TokenType.EndOfFile) || !value.IsReady)

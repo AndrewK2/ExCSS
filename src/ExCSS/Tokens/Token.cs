@@ -1,5 +1,8 @@
-﻿namespace ExCSS
+﻿using System.Diagnostics;
+
+namespace ExCSS
 {
+    [DebuggerDisplay("{" + nameof(Data) + "}")]
     internal class Token
     {
         public static readonly Token Whitespace = new Token(TokenType.Whitespace, " ", TextPosition.Empty);
