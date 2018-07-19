@@ -123,7 +123,7 @@ namespace ExCSS
 
         string IStyleFormatter.Comment(string data)
         {
-            return string.Join("/* ", data, " */");
+            return string.Concat("/*", data, "*/");
         }
     }
 }
