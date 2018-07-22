@@ -13,7 +13,7 @@ namespace ExCSS
 
         public override void ToCss(TextWriter writer, IStyleFormatter formatter)
         {
-            writer.Write(formatter.Rule("@charset", CharacterSet.StylesheetString()));
+            writer.Write(formatter.Rule("@charset", formatter.String(CharacterSet)));
         }
 
         protected override void ReplaceWith(IRule rule)

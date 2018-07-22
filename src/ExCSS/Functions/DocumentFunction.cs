@@ -12,7 +12,7 @@ namespace ExCSS
 
         public override void ToCss(TextWriter writer, IStyleFormatter formatter)
         {
-            writer.Write(Name.StylesheetFunction(Data.StylesheetString()));
+            writer.Write(Name.StylesheetFunction(formatter.String(Data)));
         }
 
         public string Name { get; }

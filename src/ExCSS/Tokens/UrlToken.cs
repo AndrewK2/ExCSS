@@ -1,4 +1,6 @@
 ﻿
+using ExCSS.Formatting;
+
 namespace ExCSS
 {
     internal sealed class UrlToken : Token
@@ -11,7 +13,7 @@ namespace ExCSS
         }
         public override string ToValue()
         {
-            var url = Data.StylesheetString();
+            var url = DefaultFormatters.Instance.FormatString(Data);
             return FunctionName.StylesheetFunction(url);
         }
 

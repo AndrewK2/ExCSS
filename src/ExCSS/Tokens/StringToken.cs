@@ -1,4 +1,6 @@
 ﻿
+using ExCSS.Formatting;
+
 namespace ExCSS
 {
     internal sealed class StringToken : Token
@@ -12,7 +14,7 @@ namespace ExCSS
 
         public override string ToValue()
         {
-            return Data.StylesheetString();
+            return DefaultFormatters.Instance.FormatString(Data);
         }
 
         public bool IsValid { get; }

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using ExCSS.Formatting;
 
 namespace ExCSS
 {
@@ -66,7 +67,7 @@ namespace ExCSS
                 match = FormMatch(prefix, match);
             }
 
-            var code = FormCode(front, "=", value.StylesheetString());
+            var code = FormCode(front, "=", DefaultFormatters.Instance.FormatString(value));
             return new SimpleSelector(Priority.OneClass, code);
         }
 
@@ -80,7 +81,7 @@ namespace ExCSS
                 match = FormMatch(prefix, match);
             }
 
-            var code = FormCode(front, "!=", value.StylesheetString());
+            var code = FormCode(front, "!=", DefaultFormatters.Instance.FormatString(value));
             return new SimpleSelector(Priority.OneClass, code);
         }
 
@@ -94,7 +95,7 @@ namespace ExCSS
                 match = FormMatch(prefix, match);
             }
 
-            var code = FormCode(front, "~=", value.StylesheetString());
+            var code = FormCode(front, "~=", DefaultFormatters.Instance.FormatString(value));
             return new SimpleSelector(Priority.OneClass, code);
         }
 
@@ -108,7 +109,7 @@ namespace ExCSS
                 match = FormMatch(prefix, match);
             }
 
-            var code = FormCode(front, "^=", value.StylesheetString());
+            var code = FormCode(front, "^=", DefaultFormatters.Instance.FormatString(value));
             return new SimpleSelector(Priority.OneClass, code);
         }
 
@@ -122,7 +123,7 @@ namespace ExCSS
                 match = FormMatch(prefix, match);
             }
 
-            var code = FormCode(front, "$=", value.StylesheetString());
+            var code = FormCode(front, "$=", DefaultFormatters.Instance.FormatString(value));
             return new SimpleSelector(Priority.OneClass, code);
         }
 
@@ -136,7 +137,7 @@ namespace ExCSS
                 match = FormMatch(prefix, match);
             }
 
-            var code = FormCode(front, "*=", value.StylesheetString());
+            var code = FormCode(front, "*=", DefaultFormatters.Instance.FormatString(value));
             return new SimpleSelector(Priority.OneClass, code);
         }
 
@@ -150,7 +151,7 @@ namespace ExCSS
                 match = FormMatch(prefix, match);
             }
 
-            var code = FormCode(front, "|=", value.StylesheetString());
+            var code = FormCode(front, "|=", DefaultFormatters.Instance.FormatString(value));
             return new SimpleSelector(Priority.OneClass, code);
         }
 

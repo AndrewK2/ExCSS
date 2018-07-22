@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using ExCSS.Formatting;
 
 namespace ExCSS
 {
@@ -108,6 +108,10 @@ namespace ExCSS
         string IStyleFormatter.Comment(string data)
         {
             return CompressedStyleFormatter.Instance.Comment(data);
+        }
+
+        public string String(string data) {
+            return DefaultFormatters.Instance.FormatString(data);
         }
     }
 }

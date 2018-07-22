@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using ExCSS.Formatting;
 using Xunit;
 
 namespace ExCSS.Tests
@@ -1047,7 +1048,7 @@ lack; }");
         [Fact]
         public void StyleSheetPreserveBlockCommentsInDeclarationValue() {
             const string source = @".test {foo: /* 9 */;}";
-            const string expected = ".test {\n\tfoo: /* 9 */;\n}";
+            const string expected = ".test {\n\tfoo: /* 9 */\n}";
 
             var sheet = ParseSheet(source, true);
             Assert.Equal(expected, sheet.ToCss(new ReadableStyleFormatter()));
@@ -1069,6 +1070,31 @@ lack; }");
 
             var sheet = ParseSheet(source, allowDuplicateStyleDeclarations: true);
             Assert.Equal(expected, sheet.ToCss(CompressedStyleFormatter.Instance));
+        }
+
+	    [Fact]
+	    public void StringFormatterImplementationOverride() {
+	        void Test(string src, string expected) {
+	            var sheet = ParseSheet(src);
+	            var actual = sheet.ToCss(CompressedStyleFormatter.Instance);
+	            Assert.Equal(expected, actual);
+	        }
+
+	        const string source = "  .test::after { content: 'abc' }";
+	        const string expected1 = ".test::after { content: \"abc\" }";
+            Test(source, expected1);
+
+            var defaultFormatter = DefaultFormatters.Instance.FormatString;
+
+            try {
+                DefaultFormatters.Instance.FormatString = s => "'" + s.ToUpperInvariant() + "'";
+
+                const string expected2 = ".test::after { content: 'ABC' }";
+                Test(source, expected2);
+            }
+            finally {
+                DefaultFormatters.Instance.FormatString = defaultFormatter;
+            }
         }
     }
 }

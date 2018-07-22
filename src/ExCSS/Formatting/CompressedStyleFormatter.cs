@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using ExCSS.Formatting;
 
 namespace ExCSS
 {
@@ -123,6 +124,10 @@ namespace ExCSS
         string IStyleFormatter.Comment(string data)
         {
             return string.Concat("/*", data, "*/");
+        }
+
+        public string String(string data) {
+            return DefaultFormatters.Instance.FormatString(data);
         }
     }
 }

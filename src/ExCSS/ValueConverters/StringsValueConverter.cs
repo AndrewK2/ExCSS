@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ExCSS.Formatting;
 
 namespace ExCSS
 {
@@ -47,7 +48,7 @@ namespace ExCSS
 
             public string CssText
             {
-                get { return string.Join(" ", _values.Select(m => m.StylesheetString())); }
+                get { return string.Join(" ", _values.Select(m => DefaultFormatters.Instance.FormatString(m))); }
             }
 
             public TokenValue Original { get; }

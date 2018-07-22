@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using ExCSS.Formatting;
 
 namespace ExCSS
 {
@@ -78,7 +79,7 @@ namespace ExCSS
 
         public static string StylesheetUrl(this string value)
         {
-            var argument = value.StylesheetString();
+            var argument = DefaultFormatters.Instance.FormatString(value);
             return FunctionNames.Url.StylesheetFunction(argument);
         }
 

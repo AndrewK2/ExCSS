@@ -13,5 +13,6 @@ namespace ExCSS
         string Rule(string name, string prelude, string rules);
         string Style(string selector, IStyleFormattable rules);
         string Comment(string data);
+        string String(string data);
     }
 }

@@ -8,7 +8,7 @@ namespace ExCSS
         {
             foreach (ISelector selector in _selectors)
             {
-                writer.Write(selector.Text);
+                writer.Write(selector.ToCss(formatter));
             }
         }
     }

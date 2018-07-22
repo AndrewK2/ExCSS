@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ExCSS.Formatting;
 
 namespace ExCSS
 {
@@ -25,7 +26,7 @@ namespace ExCSS
                 Original = new TokenValue(tokens);
             }
 
-            public string CssText => _value.StylesheetString();
+            public string CssText => DefaultFormatters.Instance.FormatString(_value);
 
             public TokenValue Original { get; }
 
