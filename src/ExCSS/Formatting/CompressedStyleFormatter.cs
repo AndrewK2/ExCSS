@@ -59,9 +59,7 @@ namespace ExCSS
             return string.Concat(name, ": ", rest);
         }
         string IStyleFormatter.Declarations(IEnumerable<string> declarations) {
-            var joined = string.Join("; ", declarations);
-            
-            return joined.Length == 0 ? "" : string.Concat(joined, ";");
+            return string.Join("; ", declarations);
         }
 
         string IStyleFormatter.Medium(bool exclusive, 

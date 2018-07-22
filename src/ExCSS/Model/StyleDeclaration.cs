@@ -59,9 +59,11 @@ namespace ExCSS
                             if(declarationsToWrite.Any()) 
                             {
                                 //flush declarations before writing comment
-                                writer.Write(formatter.Declarations(declarationsToWrite));
+                                writer.Write(formatter.Declarations(declarationsToWrite));                                
                                 declarationsToWrite.Clear();
+                                writer.Write(";");
                             }
+
                             writer.Write(formatter.Comment(comment.Data));                            
                             continue;
                         }
@@ -358,9 +360,9 @@ namespace ExCSS
             foreach (var declaration in Declarations)
             {
                 if (!declaration.Name.Is(property.Name)) { continue;}
-                RemoveChild(declaration);
-                break;
-            }
+                    RemoveChild(declaration);
+                    break;
+                }
             AppendChild(property);
         }
 
