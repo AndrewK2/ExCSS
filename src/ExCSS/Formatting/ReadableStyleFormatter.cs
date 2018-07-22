@@ -62,9 +62,9 @@ namespace ExCSS
             return CompressedStyleFormatter.Instance.Declaration(name, value, important);
         }
 
-        string IStyleFormatter.Declarations(IEnumerable<string> declarations)
-        {
-            return string.Join(NewLine, declarations.Select(m => m + ";"));
+        string IStyleFormatter.Declarations(IEnumerable<string> declarations) {
+            var separator = ";" + NewLine;
+            return string.Join(separator, declarations);
         }
 
         string IStyleFormatter.Medium(bool exclusive, bool inverse, string type,
