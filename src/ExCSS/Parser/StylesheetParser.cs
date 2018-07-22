@@ -96,7 +96,7 @@ namespace ExCSS
             var attributeSelector = AttributeSelectorFactory.Instance;
             var pseudoClassSelector = PseudoClassSelectorFactory.Instance;
             var pseudoElementSelector = PseudoElementSelectorFactory.Instance;
-            return Pool.NewSelectorConstructor(attributeSelector, pseudoClassSelector, pseudoElementSelector);
+            return Pool.NewSelectorConstructor(attributeSelector, pseudoClassSelector, pseudoElementSelector, Options.PreserveComments);
         }
 
         internal Stylesheet Parse(TextSource source)

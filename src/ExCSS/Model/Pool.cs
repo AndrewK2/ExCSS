@@ -19,13 +19,13 @@ namespace ExCSS
         }
 
         public static SelectorConstructor NewSelectorConstructor(AttributeSelectorFactory attributeSelector,
-            PseudoClassSelectorFactory pseudoClassSelector, PseudoElementSelectorFactory pseudoElementSelector)
+            PseudoClassSelectorFactory pseudoClassSelector, PseudoElementSelectorFactory pseudoElementSelector, bool preserveComments)
         {
             lock (Lock)
             {
                 return Selector.Count == 0 
-                    ? new SelectorConstructor(attributeSelector, pseudoClassSelector, pseudoElementSelector) 
-                    : Selector.Pop().Reset(attributeSelector, pseudoClassSelector, pseudoElementSelector);
+                    ? new SelectorConstructor(attributeSelector, pseudoClassSelector, pseudoElementSelector, preserveComments) 
+                    : Selector.Pop().Reset(attributeSelector, pseudoClassSelector, pseudoElementSelector, preserveComments);
             }
         }
 

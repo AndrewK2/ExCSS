@@ -19,12 +19,13 @@ namespace ExCSS
         private AttributeSelectorFactory _attributeSelector;
         private PseudoElementSelectorFactory _pseudoElementSelector;
         private PseudoClassSelectorFactory _pseudoClassSelector;
+        private bool preserveComments;
 
         public SelectorConstructor(AttributeSelectorFactory attributeSelector,
-            PseudoClassSelectorFactory pseudoClassSelector, PseudoElementSelectorFactory pseudoElementSelector)
-        {
+            PseudoClassSelectorFactory pseudoClassSelector, PseudoElementSelectorFactory pseudoElementSelector, bool preserveComments)
+        {            
             _combinators = new Stack<Combinator>();
-            Reset(attributeSelector, pseudoClassSelector, pseudoElementSelector);
+            Reset(attributeSelector, pseudoClassSelector, pseudoElementSelector, preserveComments);
         }
 
         private enum State : byte
@@ -94,7 +95,9 @@ namespace ExCSS
 
         public void Apply(Token token)
         {
-            if (token.Type == TokenType.Comment) { return; }
+            if(token.Type == TokenType.Comment && !preserveComments) {
+                return;
+            }
 
             switch (_state)
             {
@@ -129,7 +132,7 @@ namespace ExCSS
         }
 
         public SelectorConstructor Reset(AttributeSelectorFactory attributeSelector,
-            PseudoClassSelectorFactory pseudoClassSelector, PseudoElementSelectorFactory pseudoElementSelector)
+            PseudoClassSelectorFactory pseudoClassSelector, PseudoElementSelectorFactory pseudoElementSelector, bool preserveComments)
         {
             _attrName = null;
             _attrValue = null;
@@ -146,6 +149,7 @@ namespace ExCSS
             _attributeSelector = attributeSelector;
             _pseudoClassSelector = pseudoClassSelector;
             _pseudoElementSelector = pseudoElementSelector;
+            this.preserveComments = preserveComments;
             return this;
         }
 
@@ -522,7 +526,7 @@ namespace ExCSS
 
         private SelectorConstructor CreateChild()
         {
-            return Pool.NewSelectorConstructor(_attributeSelector, _pseudoClassSelector, _pseudoElementSelector);
+            return Pool.NewSelectorConstructor(_attributeSelector, _pseudoClassSelector, _pseudoElementSelector, preserveComments);
         }
 
         private abstract class FunctionState : IDisposable

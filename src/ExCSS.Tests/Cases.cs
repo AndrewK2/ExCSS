@@ -1064,6 +1064,15 @@ lack; }");
         }
 
         [Fact]
+        public void StyleSheetPreserveBlockCommentsInSelectors() {
+            const string source = "  .test/*1*/.test2/*2*/ LABEL/*3*/ { color: red; }";
+            const string expected = ".test/*1*/.test2/*2*/ LABEL/*3*/  { color: red }";
+
+            var sheet = ParseSheet(source, true);
+            Assert.Equal(expected, sheet.ToCss(CompressedStyleFormatter.Instance));
+        }
+
+        [Fact]
         public void DuplicateDeclarations() {
             const string source = ".test{color: red; color: blue}";
             const string expected = ".test { color: red; color: blue }";
