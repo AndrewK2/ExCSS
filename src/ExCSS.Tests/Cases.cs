@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using Xunit;
 
 namespace ExCSS.Tests
@@ -8,9 +10,9 @@ namespace ExCSS.Tests
 	//[TestFixture]
 	public class CssCasesTests : CssConstructionFunctions
 	{
-        static Stylesheet ParseSheet(string text, bool preserveComments = false)
+        static Stylesheet ParseSheet(string text, bool preserveComments = false, bool allowDuplicateStyleDeclarations = false)
         {
-            return ParseStyleSheet(text, true, true, true, true, true, preserveComments);
+            return ParseStyleSheet(text, true, true, true, true, true, preserveComments, allowDuplicateStyleDeclarations);
         }
 
 		[Fact]//[Test]
@@ -1054,10 +1056,19 @@ lack; }");
         [Fact]
         public void StyleSheetPreserveBlockCommentsAtDeclarationLevel() {
             const string source = ".test{/* color is red */ color: red;/* font is bold*/font-weight:bold;}";
-            const string expected = ".test {\n\t/* color is red */color: red;/* font is bold*/font-weight: bold;\n}";
+            const string expected = ".test {\n\t/* color is red */color: red;/* font is bold*/font-weight: bold\n}";
 
             var sheet = ParseSheet(source, true);
             Assert.Equal(expected, sheet.ToCss(new ReadableStyleFormatter()));
+        }
+
+        [Fact]
+        public void DuplicateDeclarations() {
+            const string source = ".test{color: red; color: blue}";
+            const string expected = ".test { color: red; color: blue }";
+
+            var sheet = ParseSheet(source, allowDuplicateStyleDeclarations: true);
+            Assert.Equal(expected, sheet.ToCss(CompressedStyleFormatter.Instance));
         }
     }
 }

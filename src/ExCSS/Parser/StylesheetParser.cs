@@ -16,7 +16,8 @@ namespace ExCSS
              bool tolerateInvalidSelectors = false,
              bool tolerateInvalidValues = false,
              bool tolerateInvalidConstraints = false,
-             bool preserveComments = false
+             bool preserveComments = false,
+             bool allowDuplicateStyleDeclarations = false
             ) 
         {
             Options = new ParserOptions
@@ -26,7 +27,8 @@ namespace ExCSS
                 AllowInvalidSelectors = tolerateInvalidSelectors,
                 AllowInvalidValues = tolerateInvalidValues,
                 AllowInvalidConstraints = tolerateInvalidConstraints,
-                PreserveComments = preserveComments
+                PreserveComments = preserveComments,
+                AllowDuplicateStyleDeclarations = allowDuplicateStyleDeclarations
             };
         }
 

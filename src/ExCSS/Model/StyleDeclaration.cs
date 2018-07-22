@@ -357,12 +357,16 @@ namespace ExCSS
 
         void SetLonghand(IProperty property)
         {
-            foreach (var declaration in Declarations)
-            {
-                if (!declaration.Name.Is(property.Name)) { continue;}
+            if(!_parser.Options.AllowDuplicateStyleDeclarations) {
+                foreach(var declaration in Declarations) {
+                    if(!declaration.Name.Is(property.Name)) {
+                        continue;
+                    }
+
                     RemoveChild(declaration);
                     break;
                 }
+            }
             AppendChild(property);
         }
 

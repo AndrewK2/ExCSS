@@ -10,7 +10,8 @@
              bool tolerateInvalidSelectors = false,
              bool tolerateInvalidValues = false,
              bool tolerateInvalidConstraints = false,
-             bool preserveComments = false)
+             bool preserveComments = false,
+             bool allowDuplicateStyleDeclarations = false)
         {
             var parser = new StylesheetParser(
                 includeUnknownRules,
@@ -18,7 +19,8 @@
                 tolerateInvalidSelectors,
                 tolerateInvalidValues,
                 tolerateInvalidConstraints,
-                preserveComments);
+                preserveComments,
+                allowDuplicateStyleDeclarations);
 
             return parser.Parse(source);
         }
