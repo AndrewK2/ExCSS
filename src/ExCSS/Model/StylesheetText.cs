@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace ExCSS
 {
+    [DebuggerDisplay("{" + nameof(Text) + "}")]
     public class StylesheetText
     {
         private readonly TextSource _source;
