@@ -428,9 +428,10 @@ namespace ExCSS
             while (token.Type != TokenType.EndOfFile)
             {
                 var rule = CreateRule(token);
+                sheet.Rules.Add(rule);
+
                 token = NextToken();
                 ParseComments(ref token);
-                sheet.Rules.Add(rule);
             }
 
             _nodes.Pop();

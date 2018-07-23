@@ -1073,6 +1073,15 @@ lack; }");
         }
 
         [Fact]
+        public void StyleSheetPreserveBlockCommentsInStylesheet() {
+            const string source = "/*1*/@media screen{.foo{}}/*2*/";
+            const string expected = "/*1*/\r\n@media screen { .foo { } }\r\n/*2*/";
+
+            var sheet = ParseSheet(source, true);
+            Assert.Equal(expected, sheet.ToCss(CompressedStyleFormatter.Instance));
+        }
+
+        [Fact]
         public void DuplicateDeclarations() {
             const string source = ".test{color: red; color: blue}";
             const string expected = ".test { color: red; color: blue }";
