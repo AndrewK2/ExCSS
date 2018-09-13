@@ -3,7 +3,7 @@ using ExCSS.Formatting;
 
 namespace ExCSS
 {
-    internal sealed class SimpleSelector : StylesheetNode, ISelector
+    public sealed class SimpleSelector : StylesheetNode, ISelector
     {
         public SimpleSelector() : this(Priority.Zero, Keywords.Asterisk)
         {

@@ -1,10 +1,16 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace ExCSS
 {
-    internal sealed class ListSelector : Selectors, ISelector
-    {
+    internal sealed class ListSelector : Selectors, ISelector, IListSelector {
         public bool IsInvalid { get; internal set; }
+
+        public IList<ISelector> Selectors {
+            get {
+                return _selectors;
+            }
+        }
 
         public override void ToCss(TextWriter writer, IStyleFormatter formatter)
         {

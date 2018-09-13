@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ExCSS
 {
-    internal sealed class ComplexSelector : StylesheetNode, ISelector, IEnumerable<ISelector>
+    public sealed class ComplexSelector : StylesheetNode, ISelector, IEnumerable<ISelector>
     {
         private readonly List<CombinatorSelector> _selectors;
 
